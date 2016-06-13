@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionSubtagCollectionTests.cs" />
+    <Compile Include="PerfomanceTests.cs" />
     <Compile Include="LanguageTagTests.ctors.cs">
       <DependentUpon>LanguageTagTests.ctors.tt</DependentUpon>
       <AutoGen>True</AutoGen>
