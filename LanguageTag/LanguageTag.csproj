@@ -51,6 +51,9 @@
     <Compile Include="LanguageExtensions.generated.cs">
       <DependentUpon>RegistryGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="LanguageExtensions.parsing.generated.cs">
+      <DependentUpon>RegistryGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="LanguageTag.ctors.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

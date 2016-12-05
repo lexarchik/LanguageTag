@@ -43,17 +43,17 @@ namespace AbbyyLS.Globalization.Bcp47
 			Assert.Throws<FormatException>(() => text.ParseFromExtensionSubtag());
 		}
 
-		[TestCase(new string[] { "aaa" }, "a-aaa")]
-		[TestCase(new string[] { "aaa", "bbb" }, "a-aaa-bbb")]
-		public void ToString(string[] subtags, string expected)
+		[TestCase("a-aaa", "aaa")]
+		[TestCase("a-aaa-bbb", "aaa", "bbb")]
+		public void ToString(string expected, params string[] subtags)
 		{
 			var ext = new ExtensionSubtag('a', subtags);
 			Assert.AreEqual(expected, ext.ToString());
 		}
 
-		[TestCase((object)new string[] { "aaa" })]
-		[TestCase((object)new string[] { "aaa", "bbb" })]
-		public void Enumerate(string[] subtags)
+		[TestCase("aaa")]
+		[TestCase("aaa", "bbb")]
+		public void Enumerate(params string[] subtags)
 		{
 			var ext = new ExtensionSubtag('a', subtags);
 			Assert.That(ext, Is.EquivalentTo(subtags));

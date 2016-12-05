@@ -19,6 +19,77 @@
 	var variants = entries.Where(_ => _.Type == "variant");
 	var grandfathered = entries.Where(_ => _.Type == "grandfathered");
 #><#+
+
+	public class TreeNode
+	{
+		public string Prefix;
+		public Dictionary<char, LinkNode> Nested;
+		public string Value;
+
+		public static List<TreeNode> Convert(IEnumerable<KeyValuePair<string, string>> pairs)
+		{
+			var result = new List<TreeNode>();
+			var dic = LinkNode.Convert(pairs.ToArray());
+
+			foreach(var pair in dic)
+			{
+				var node = new TreeNode();
+				node.Prefix = pair.Key.ToString();
+				node.Value = pair.Value.Value;
+				node.Nested = pair.Value.Nested;
+				result.Add(node);
+				result.AddRange(Convert(node.Prefix, pair.Value.Nested));
+			}
+
+			return result;
+		}
+
+		public static List<TreeNode> Convert(string prefix, Dictionary<char, LinkNode> dic)
+		{
+			var result = new List<TreeNode>();
+			
+			foreach(var pair in dic)
+			{
+				var node = new TreeNode();
+				node.Prefix = prefix + pair.Key.ToString();
+				node.Value = pair.Value.Value;
+				node.Nested = pair.Value.Nested;
+				result.Add(node);
+				result.AddRange(Convert(node.Prefix, pair.Value.Nested));
+			}
+
+
+			return result;
+		}
+	}
+
+	public class LinkNode
+	{
+		public Dictionary<char, LinkNode> Nested;
+		public string Value;
+
+		public static Dictionary<char, LinkNode> Convert(KeyValuePair<string, string>[] pairs)
+		{
+			if (pairs.Length == 0)
+				return new Dictionary<char, LinkNode>();
+
+			var result = new Dictionary<char, LinkNode>();
+
+			foreach (var group in pairs.GroupBy(_ => _.Key[0]))
+			{
+				var nextLevel = group.Select(_ => new KeyValuePair<string, string>(_.Key.Substring(1), _.Value)).ToArray();
+
+				result.Add(group.Key, new LinkNode()
+				{
+					Nested = Convert(nextLevel.Where(_ => _.Key != "").ToArray()),
+					Value = nextLevel.Where(_ => _.Key == "").Select(_ => _.Value).FirstOrDefault()
+				});
+			}
+
+			return result;
+		}
+	}
+
 	public static class CodeStyle
 	{
 		public static string ToVariantCode(string text)

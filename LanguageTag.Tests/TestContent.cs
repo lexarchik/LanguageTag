@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace AbbyyLS.Globalization.Bcp47
 {

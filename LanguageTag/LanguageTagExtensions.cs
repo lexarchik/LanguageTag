@@ -133,9 +133,13 @@ namespace AbbyyLS.Globalization.Bcp47
 
 		internal static Language ParseLanguage(this LanguageTag.TokenEnumerator tokens)
 		{
+			int offset = 0;
+
 			if (!tokens.NextTokenAvailable)
 			{
-				var result = tokens.Token.TryParseFromLanguage();
+				//var result = tokens.Token.TryParseFromLanguage(); //TODO: test parse
+				var result = tokens.Token.TryParseFromLanguage(ref offset);
+
 				if (!result.HasValue)
 					throw new FormatException("unexpected language '" + tokens.Token + "'");
 
@@ -143,7 +147,8 @@ namespace AbbyyLS.Globalization.Bcp47
 				return result.Value;
 			}
 
-			var lang = tokens.Token.TryParseFromLanguage();
+			//var lang = tokens.Token.TryParseFromLanguage(); //TODO: test parse
+			var lang = tokens.Token.TryParseFromLanguage(ref offset);
 			if (lang == null)
 				throw new FormatException("unexpected language '" + tokens.Token + "'");
 

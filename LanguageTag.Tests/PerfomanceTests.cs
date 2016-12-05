@@ -16,12 +16,12 @@ namespace AbbyyLS.Globalization.Bcp47
 		{
 			List<string> tagText = new List<string>();
 
-			foreach (var lang in Reduce(TestContent.GetLanguages(), 10))
-				foreach (var script in Reduce(TestContent.GetScripts(), 10))
-					foreach (var region in Reduce(TestContent.GetRegions(), 10))
+			foreach (var lang in Reduce(TestContent.GetLanguages(), 6))
+				foreach (var script in Reduce(TestContent.GetScripts(), 6))
+					foreach (var region in Reduce(TestContent.GetRegions(), 6))
 						tagText.Add(string.Join("-", lang, script, region));
 
-			Console.WriteLine("Parse {0} samples.");
+			Console.WriteLine("Parse {0} samples.", tagText.Count);
 
 			for (int i = 0; i <= 2; i++)
 			{

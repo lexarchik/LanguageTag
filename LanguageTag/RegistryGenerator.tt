@@ -211,6 +211,65 @@ namespace AbbyyLS.Globalization.Bcp47
 	}
 }
 <# manager.EndBlock(); #>
+<# manager.StartNewFile("LanguageExtensions.parsing.generated.cs"); #>
+using System;
+using System.Globalization;
+
+namespace AbbyyLS.Globalization.Bcp47
+{
+	public static partial class LanguageTagExtensions
+	{
+<#
+var nodes = TreeNode.Convert(prlangs.Select(_ => new KeyValuePair<string, string>(_.Subtag.ToLower(), (_.PreferredValue??_.Subtag).ToUpper())));
+#>
+		public static Language? TryParseFromLanguage(this string text, ref int offset)
+		{
+			if(offset < text.Length)
+			{
+				var ch = Char.ToLowerInvariant(text[offset]);
+				offset++;
+				switch(ch)
+				{
+<#foreach(var node in nodes.Where(_ => _.Prefix.Length == 1))
+{ #>
+					case '<#= node.Prefix #>': return tryParseFromLanguage_<#= node.Prefix #>(text, ref offset);
+<# } #>
+				}
+				offset--;
+			}
+			return null;
+		}
+<#foreach(var node in nodes.Where(_ => _.Nested.Any()))
+{ #>
+
+		private static Language? tryParseFromLanguage_<#= node.Prefix #>(string text, ref int offset)
+		{
+<#if(node.Nested.Any())
+{ #>
+			if(offset < text.Length)
+			{
+				var ch = Char.ToLowerInvariant(text[offset]);
+				offset++;
+				switch(ch)
+				{
+<#foreach(var pair in node.Nested)
+{
+if(pair.Value.Nested.Any()) { #>
+					case '<#= pair.Key #>': return tryParseFromLanguage_<#= node.Prefix #><#= pair.Key #>(text, ref offset);
+<# } else { #>
+					case '<#= pair.Key #>': return Language.<#= pair.Value.Value #>;
+<# } #>
+<# } #>
+				}
+				offset--;
+			}
+<# } #>
+			return <#if(node.Value == null){ #>null<#}else{#>Language.<#= node.Value #><# } #>;
+		}
+<# } #>
+	}
+}
+<# manager.EndBlock(); #>
 <# manager.StartNewFile("Region.cs"); #>
 using System;
 

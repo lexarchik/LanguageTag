@@ -104,11 +104,11 @@ namespace AbbyyLS.Globalization.Bcp47
 			Assert.IsFalse(vc3 == vc5);
 		}
 
-		[TestCase(new Variant[] { }, Variant.Alalc97, false)]
-		[TestCase(new Variant[] { Variant.Aluku }, Variant.Alalc97, false)]
-		[TestCase(new Variant[] { Variant.Aluku }, Variant.Aluku, true)]
-		[TestCase(new Variant[] { Variant.Aluku, Variant.Alalc97 }, Variant.Alalc97, true)]
-		public void Contains(Variant[] variants, Variant tag, bool expected)
+		[TestCase(false, Variant.Alalc97, new Variant[] { })]
+		[TestCase(false, Variant.Alalc97, new Variant[] { Variant.Aluku })]
+		[TestCase(true, Variant.Aluku, new Variant[] { Variant.Aluku })]
+		[TestCase(true, Variant.Alalc97, new Variant[] { Variant.Aluku, Variant.Alalc97 })]
+		public void Contains(bool expected, Variant tag, params Variant[] variants)
 		{
 			Assert.That(new VariantCollection(variants).Contains(tag), Is.EqualTo(expected));
 		}
