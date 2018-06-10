@@ -12,3 +12,4 @@ TestResult.xml
 /packages/
 *.nupkg
 .paket/paket.exe
+paket-files/
